@@ -1,4 +1,4 @@
-/// <mls fileReference="_102032_/l2/plugins/pluginTranslate.ts" enhancement="_102027_enhancementLit"/>
+/// <mls fileReference="_102032_/l2/plugins/pluginTranslate.ts" enhancement="_102027_/l2/enhancementLit"/>
 
 import { html, svg, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
