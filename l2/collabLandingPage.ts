@@ -1,11 +1,11 @@
 /// <mls fileReference="_102032_/l2/collabLandingPage.ts" enhancement="_102027_/l2/enhancementLit"/>
 
-import { LitElement } from 'lit';
+//import { LitElement } from 'lit';
 
 /**
  * Class extending LitElement with CollabState functionality.
  */
-export class CollabLandingPage extends LitElement {
+export class CollabLandingPage extends HTMLElement {
 
   createRenderRoot() {
     return this;

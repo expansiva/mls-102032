@@ -7,7 +7,7 @@ import { setCodeLens } from '/_102027_/l2/codeLensLit.js';
 import { injectStyle, injectStyleAction } from '/_102027_/l2/processCssLit.js'
 
 export const requires: mls.l2.enhancement.IRequire[] = [
-    {
+    /*{
         type: 'tspath',
         name: 'lit',
         ref: "file://server/_102027_/l2/litElement.ts"
@@ -27,7 +27,7 @@ export const requires: mls.l2.enhancement.IRequire[] = [
         type: "cdn",
         name: "lit/decorators.js",
         ref: "https://cdn.jsdelivr.net/npm/lit@3.0.0/decorators/+esm",
-    },
+    },*/
     {
         type: "link",
         name: "fontAwesome",
