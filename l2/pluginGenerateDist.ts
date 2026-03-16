@@ -466,6 +466,7 @@ export class PluginGenerateDist extends CollabLitElement {
             await this.publishMyPages();
             await this.publishMyAssets();
             await this.createVersionFile();
+            await this.updateVariable();
         } else {
             await this.addLog(`This language mode not implemented(${this.myState.modeLang})`, 'ERROR');
         }
@@ -632,6 +633,36 @@ export class PluginGenerateDist extends CollabLitElement {
         }
 
 
+    }
+
+    private async updateVariable() {
+
+        const variableName = await this.getVariableByProject(mls.actualProject || 0);
+        if (!variableName) return;
+
+        await this.addLog(`Update variable: ${variableName}`, 'INFO');
+
+        const driver = await mls.stor.others.getDefaultDriver(mls.actualProject || 0);
+        if (!variableName || !driver.updateVariable) return;
+
+        await driver.updateVariable(variableName, this.myState.newVersion);
+
+
+    }
+
+    private async getVariableByProject(project: number): Promise<string | undefined> {
+        if (!project) return;
+        const url = `/_${project}_/l2/project.js`
+        try {
+            const modulePrj = await import(url);
+            if (!modulePrj || !modulePrj.projectConfig || !modulePrj.projectConfig.masterFrontEnd || !modulePrj.projectConfig.masterFrontEnd.variableVersion) return;
+
+            return modulePrj.projectConfig.masterFrontEnd.variableVersion;
+
+        } catch (err) {
+            console.error('no find project config');
+            return;
+        }
     }
 
     private async addLog(msg: string, tp: 'INFO' | 'SUCCESS' | 'ERROR') {
