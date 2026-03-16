@@ -5,7 +5,7 @@ import { state, query } from 'lit/decorators.js';
 import { CollabLitElement } from '/_102027_/l2/collabLitElement.js';
 import { getAllDefs } from '/_102027_/l2/libMindMap.js';
 import { createStorFile, IReqCreateStorFile } from '/_102027_/l2/libStor.js';
-import {  buildLandingPageByStor } from '/_102032_/l2/libCompileLandingPage.js';
+import { buildLandingPageByStor } from '/_102032_/l2/libCompileLandingPage.js';
 
 
 /// **collab_i18n_start**
@@ -289,7 +289,7 @@ export class PluginGenerateDist extends CollabLitElement {
 
         await this.getLanguages();
         await this.getPages();
-        this.getAssets();
+
 
     }
 
@@ -323,7 +323,6 @@ export class PluginGenerateDist extends CollabLitElement {
 
         const assets: mls.stor.IFileInfo[] = [];
         Object.keys(mls.stor.files).forEach((key) => {
-
             const stor = mls.stor.files[key];
             if (stor.project === mls.actualProject && stor.level === 2 && stor.folder.startsWith(this.myState.folders.ori)) {
                 const defsKey = mls.stor.getKeyToFile({ ...stor, extension: '.defs.ts' });
@@ -565,18 +564,20 @@ export class PluginGenerateDist extends CollabLitElement {
             }
 
             const info = await createStorFile(param, false, false, false);
-            return;
+            return info;
 
         }
 
-        const m = await stor.getOrCreateModel();
-        if (m) m.model.setValue(content);
+        stor.status = 'changed';
+        stor.updatedAt = new Date().toISOString();
+        await mls.stor.localStor.setContent(stor, { content, contentType: 'string' });
+
 
     }
 
 
     private async publishMyAssets() {
-
+        this.getAssets();
         for await (const f of this.myState.assets) {
             await this.publishAssets(f)
         }
@@ -609,6 +610,7 @@ export class PluginGenerateDist extends CollabLitElement {
                 extension: stor.extension,
                 versionRef: '0',
             };
+
 
             const file = await mls.stor.addOrUpdateFile(params);
             if (!file) throw new Error('[createStorFile] Invalid storFile');
