@@ -133,10 +133,8 @@ async function generateHTML(project: number, json: any, js: String, contentHTML:
     console.info(info);
     const metas = (info.meta || []).join('\n');
 
-    let html = `
+    let html = ` <!DOCTYPE html>
     <html lang="en">
-
-
     <head>
         ${info?.title ? `<title>${info.title}</title>` : '<title> Landing Page</title>'}
         ${metas}        
@@ -145,11 +143,10 @@ async function generateHTML(project: number, json: any, js: String, contentHTML:
     </head>
     <body>
         ${contentHTML}
-        <script type=>
+        <script>
             ${js}
         </script> 
         ${json.importsJs.map((i: string) => { if (i.startsWith('/')) { return '' } else return `<script src="${i}"></script>` })}
-        
     </body> 
     </html>  
     `

@@ -81,7 +81,11 @@ export class PluginGenerateDist extends CollabLitElement {
         folders: { ori: '', dest: '' },
         pages: [],
         assets: [],
-        actualtheme: 'Default'
+        actualtheme: 'Default',
+        robots: '',
+        folderRobots: '',
+        folderSitemap: '',
+        baseSitemap: ''
     };
 
     private msg: MessageType = messages['en'];
@@ -108,11 +112,17 @@ export class PluginGenerateDist extends CollabLitElement {
     @state() folders = { ori: 'www', dest: 'dist' };
     @state() languages: ILanguage[] = [];
     @state() pages: mls.stor.IFileInfo[] = [];
+    @state() useRobots: boolean = true;
+    @state() useSiteMap: boolean = true;
 
     @state() inPublish: boolean = false;
     @state() clickedPublish: boolean = false;
     @state() logs: string[] = [];
     @query('#logBox') logBox: HTMLElement | undefined;
+    @query('#txtRobots') txtRobots: HTMLTextAreaElement | undefined;
+    @query('#iptRobots') iptRobots: HTMLInputElement | undefined;
+    @query('#iptSitemap') iptSitemap: HTMLInputElement | undefined;
+    @query('#iptBaseSitemap') iptBaseSitemap: HTMLInputElement | undefined;
 
 
     firstUpdated() {
@@ -177,6 +187,11 @@ export class PluginGenerateDist extends CollabLitElement {
     }
 
     renderScenary1() {
+
+        const vlRobots = `
+        User-agent: *\nAllow: /\n\n# Block only\nDisallow: /assets/\n\nSitemap: https://collab.codes/sitemap.xml
+        `.trim();
+
         return html`
             <div class="content">
                 <fieldset>
@@ -219,6 +234,45 @@ export class PluginGenerateDist extends CollabLitElement {
                         </select>
                     </div>
                     ${this.modeLang === 'useLang' ? this.renderLang() : ''}
+                </fieldset>
+
+                <fieldset>
+                    <legend>Robots</legend>
+                    <div class="field">
+                        <label>Use Robots</label>
+                        <select @change=${(e: any) => this.useRobots = e.target.value === 'yes'}>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+
+                        <label style="margin-top:.5rem;display:${this.useRobots ? '' : 'none'}">Folder Robots</label>
+                        <input id="iptRobots" value="en" type="text" style="display:${this.useRobots ? '' : 'none'}">
+
+                        <label style="margin-top:.5rem;display:${this.useRobots ? '' : 'none'}">Content</label>
+                        <textarea id="txtRobots" style="height:150px;display:${this.useRobots ? '' : 'none'}" >${vlRobots}</textarea>
+                    </div>
+                    
+                </fieldset>
+
+                <fieldset>
+                    <legend>Sitemap</legend>
+                    <div class="field">
+                        <label>Use Sitemap</label>
+                        <select @change=${(e: any) => { this.useSiteMap = e.target.value === 'yes' }}>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+
+                        <label style="margin-top:.5rem;display:${this.useSiteMap ? '' : 'none'}">Folder Sitemap</label>
+                        <input id="iptSitemap" value="en" type="text" style="display:${this.useSiteMap ? '' : 'none'}">
+
+                        <label style="margin-top:.5rem;display:${this.useSiteMap ? '' : 'none'}">Base Sitemap</label>
+
+                        <input id="iptBaseSitemap" value="https://www.collab.codes/" type="text" style="display:${this.useSiteMap ? '' : 'none'}">
+
+                        
+                    </div>
+                    
                 </fieldset>
 
                 <div class="actions">
@@ -350,6 +404,8 @@ export class PluginGenerateDist extends CollabLitElement {
 
             if (scenary === 1) {
                 this.completed = [];
+                this.useSiteMap = true;
+                this.useRobots = true;
             }
 
             if (scenary === 2) {
@@ -396,8 +452,23 @@ export class PluginGenerateDist extends CollabLitElement {
         if (this.folders.dest === '') throw new Error('Fill a folder dest');
         if (this.folders.ori === '') throw new Error('Fill a folder ori');
 
+        if (this.useRobots && !this.txtRobots || (this.txtRobots && !this.txtRobots.value.trim())) {
+            throw new Error('Fill a text robots');
+        }
+
+        if (this.useSiteMap && ((!this.iptSitemap || !this.iptBaseSitemap) || (this.iptBaseSitemap && !this.iptBaseSitemap.value))) {
+            throw new Error('Fill a sitemap');
+        }
+
         this.myState.folders.dest = this.folders.dest;
         this.myState.folders.ori = this.folders.ori;
+        this.myState.robots = this.txtRobots ? this.txtRobots.value.trim() : '';
+        this.myState.folderRobots = this.iptRobots && this.iptRobots.value ? this.iptRobots.value.trim() : '';
+
+        this.myState.baseSitemap = this.iptBaseSitemap ? this.iptBaseSitemap.value.trim() : '';
+        this.myState.folderSitemap = this.iptSitemap && this.iptSitemap.value ? this.iptSitemap.value.trim() : '';
+
+        if (this.myState.baseSitemap.endsWith('/')) this.myState.baseSitemap = this.myState.baseSitemap.substring(0, this.myState.baseSitemap.length - 1)
 
 
     }
@@ -451,7 +522,12 @@ export class PluginGenerateDist extends CollabLitElement {
             folders: { ori: '', dest: '' },
             pages: [],
             assets: [],
-            actualtheme: 'Default'
+            actualtheme: 'Default',
+            robots: '',
+            folderRobots: '',
+            folderSitemap: '',
+            baseSitemap: ''
+
         };
 
         this.next(1);
@@ -465,6 +541,8 @@ export class PluginGenerateDist extends CollabLitElement {
             await this.publishMyPages();
             await this.publishMyAssets();
             await this.createVersionFile();
+            await this.createRobotsFile();
+            await this.createSitemapFile();
             await this.updateVariable();
         } else {
             await this.addLog(`This language mode not implemented(${this.myState.modeLang})`, 'ERROR');
@@ -572,6 +650,87 @@ export class PluginGenerateDist extends CollabLitElement {
         stor.updatedAt = new Date().toISOString();
         await mls.stor.localStor.setContent(stor, { content, contentType: 'string' });
 
+
+    }
+
+    private async createRobotsFile() {
+
+        if (!this.useRobots || !this.myState.robots) return;
+
+        await this.addLog(`Creating robots file...`, 'INFO');
+
+        let project = mls.actualProject || 0;
+        let level = 2;
+        let shortName = 'robots';
+        let extension = '.txt';
+        let folder = 'dist/' + this.myState.newVersion + (this.myState.folderRobots ? '/' + this.myState.folderRobots : '');
+        let content = this.myState.robots
+
+
+        const param: IReqCreateStorFile = {
+            project,
+            folder,
+            shortName,
+            level,
+            extension,
+            source: content,
+            status: 'new'
+
+        }
+
+        const info = await createStorFile(param, false, false, false);
+        return info;
+
+    }
+
+    private async createSitemapFile() {
+
+        if (!this.useSiteMap || !this.myState.baseSitemap) return;
+
+        await this.addLog(`Creating sitemap file...`, 'INFO');
+
+        let project = mls.actualProject || 0;
+        let level = 2;
+        let shortName = 'sitemap';
+        let extension = '.xml';
+        let folder = 'dist/' + this.myState.newVersion + (this.myState.folderSitemap ? '/' + this.myState.folderSitemap : '');
+        const today = new Date().toISOString().split('T')[0];
+        let content = `
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>${this.myState.baseSitemap}/</loc>
+        <lastmod>${today}</lastmod>
+        <priority>1.0</priority>
+    </url>
+    ${this.myState.pages.map((p) => {
+            if (p.shortName === 'index') return '';
+            const page = p.shortName + '.html';
+            const pri = '0.5';
+            return `<url>
+    <loc>${this.myState.baseSitemap}/${page}</loc>
+    <lastmod>${today}</lastmod>
+    <priority>${pri}</priority>
+  </url>`
+        })};
+  
+</urlset>
+        `
+
+
+        const param: IReqCreateStorFile = {
+            project,
+            folder,
+            shortName,
+            level,
+            extension,
+            source: content,
+            status: 'new'
+
+        }
+        console.info(param);
+        const info = await createStorFile(param, false, false, false);
+        return info;
 
     }
 
@@ -722,7 +881,11 @@ interface IStatePlugin {
     folders: { ori: string, dest: string }
     pages: mls.stor.IFileInfo[],
     assets: mls.stor.IFileInfo[],
-    actualtheme: string
+    actualtheme: string,
+    robots: string,
+    folderRobots: string,
+    folderSitemap: string,
+    baseSitemap: string,
 }
 
 if (!customElements.get('plugin-generate-dist-102032')) {
