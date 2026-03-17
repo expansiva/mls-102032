@@ -146,7 +146,7 @@ async function generateHTML(project: number, json: any, js: String, contentHTML:
         <script>
             ${js}
         </script> 
-        ${json.importsJs.map((i: string) => { if (i.startsWith('/')) { return '' } else return `<script src="${i}"></script>` })}
+        ${json.importsJs.map((i: string) => { if (i.startsWith('/')) { return '' } else return `<script src="${i}"></script>` }).join('')}
     </body> 
     </html>  
     `
