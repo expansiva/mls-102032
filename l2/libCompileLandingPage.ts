@@ -133,7 +133,7 @@ async function generateHTML(project: number, json: any, js: String, contentHTML:
     console.info(info);
     const metas = (info.meta || []).join('\n');
 
-    let html = ` <!DOCTYPE html>
+    let html = `<!DOCTYPE html>
     <html lang="en">
     <head>
         ${info?.title ? `<title>${info.title}</title>` : '<title> Landing Page</title>'}
@@ -151,7 +151,7 @@ async function generateHTML(project: number, json: any, js: String, contentHTML:
     </html>  
     `
 
-    return html;
+    return html.trim();
 }
 
 async function getCss(json: any) {
