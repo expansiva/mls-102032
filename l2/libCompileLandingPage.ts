@@ -130,7 +130,6 @@ async function generateHTML(project: number, json: any, js: String, contentHTML:
 
     const css = await getCss(json);
     const info = await getPreviewConfigByProject(project);
-    console.info(info);
     const metas = (info.meta || []).join('\n');
 
     let html = `<!DOCTYPE html>

@@ -10,7 +10,8 @@ export const requires: mls.l2.enhancement.IRequire[] = [
     {
         type: "import",
         name: "tailwind.js",
-        ref: "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
+        ref: "https://cdn.tailwindcss.com"
+        //ref: "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
     }
 ] as any ;
 
