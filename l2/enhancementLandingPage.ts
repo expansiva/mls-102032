@@ -6,14 +6,14 @@ import { validateTagName, validateRender } from '/_102027_/l2/validateLit.js';
 import { setCodeLens } from '/_102027_/l2/codeLensLit.js';
 import { injectStyle, injectStyleAction } from '/_102027_/l2/processCssLit.js'
 
-export const requires: mls.l2.enhancement.IRequire[] = [ 
+export const requires: mls.l2.enhancement.IRequire[] = [
     {
         type: "import",
         name: "tailwind.js",
         ref: "https://cdn.tailwindcss.com"
         //ref: "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
     }
-] as any ;
+];
 
 export const getDefaultHtmlExamplePreview = (modelTS: mls.editor.IModelTS): string => {
     const { project, shortName, folder } = modelTS.storFile;
