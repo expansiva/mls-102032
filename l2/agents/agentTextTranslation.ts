@@ -1,6 +1,6 @@
 /// <mls fileReference="_102032_/l2/agents/agentTextTranslation.ts" enhancement="_blank"/>
 
-import { IAgentAsync, IAgentMeta } from '/_100554_/l2/aiAgentBase.js';
+import { IAgentAsync, IAgentMeta } from '/_102027_/l2/aiAgentBase.js';
 import { TranslationExtractItem } from '/_102032_/l2/agents/agentTextExtractor.js'
 
 export function createAgent(): IAgentAsync {

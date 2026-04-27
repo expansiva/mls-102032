@@ -1,6 +1,6 @@
 /// <mls fileReference="_102032_/l2/pluginCollabCoreIndex.ts" enhancement="_blank"/>
 
-import { PluginBaseIndex } from '/_100554_/l2/pluginBaseIndex.js';
+import { PluginBaseIndex } from '/_102027_/l2/pluginBaseIndex.js';
 
 export class PluginCollabCoreIndex extends PluginBaseIndex {
 
