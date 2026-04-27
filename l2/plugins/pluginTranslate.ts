@@ -2,7 +2,7 @@
 
 import { html, svg, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { StateLitElement } from '/_100554_/l2/stateLitElement.js';
+import { StateLitElement } from '/_102027_/l2/stateLitElement.js';
 
 /// **collab_i18n_start**
 const message_pt = {

@@ -1,8 +1,8 @@
 /// <mls fileReference="_102032_/l2/agents/agentTextExtractor.ts" enhancement="_blank"/>
 
-import { IAgentAsync, IAgentMeta } from '/_100554_/l2/aiAgentBase.js';
-import { getTemporaryContext } from '/_100554_/l2/aiAgentHelper.js';
-import { executeBeforePrompt, loadAgent } from '/_100554_/l2/aiAgentOrchestration.js';
+import { IAgentAsync, IAgentMeta } from '/_102027_/l2/aiAgentBase.js';
+import { getTemporaryContext } from '/_102027_/l2/aiAgentHelper.js';
+import { executeBeforePrompt, loadAgent } from '/_102027_/l2/aiAgentOrchestration.js';
 
 
 export function createAgent(): IAgentAsync {
