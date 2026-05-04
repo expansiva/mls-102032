@@ -1,6 +1,7 @@
 /// <mls fileReference="_102032_/l2/pluginGenerateDist.ts" enhancement="_102027_/l2/enhancementLit"/>
 
-import { html, svg, TemplateResult, unsafeHTML } from 'lit';
+import { html, svg, TemplateResult } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { state, query } from 'lit/decorators.js';
 import { CollabLitElement } from '/_102027_/l2/collabLitElement.js';
 import { getAllDefs } from '/_102027_/l2/libMindMap.js';
