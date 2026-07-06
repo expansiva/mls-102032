@@ -3,7 +3,7 @@
 import { html, svg, TemplateResult } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { state, query } from 'lit/decorators.js';
-import { CollabLitElement } from '/_102027_/l2/collabLitElement.js';
+import { CollabLitElement } from '/_102029_/l2/collabLitElement.js';
 import { getAllDefs } from '/_102027_/l2/libMindMap.js';
 import { createStorFile, IReqCreateStorFile } from '/_102027_/l2/libStor.js';
 import { buildLandingPageByStor } from '/_102032_/l2/libCompileLandingPage.js';
