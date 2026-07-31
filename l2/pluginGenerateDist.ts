@@ -807,7 +807,7 @@ export class PluginGenerateDist extends CollabLitElement {
         const driver = await mls.stor.others.getDefaultDriver(mls.actualProject || 0);
         if (!variableName || !driver.updateVariable) return;
 
-        await driver.updateVariable(variableName, this.myState.newVersion);
+        await driver.updateVariable(mls.actualProject || 0, variableName, this.myState.newVersion);
 
 
     }
